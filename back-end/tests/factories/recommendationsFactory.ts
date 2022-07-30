@@ -10,38 +10,42 @@ async function insert(recommendation: CreateRecommendationData){
   });
 }
 
-async function insertTwenty() {
-  const INSERT_AMOUNT = 20;
+async function insertMany(amount: number, score: number) {
+  const INSERT_AMOUNT = amount;
   const insertedRecommendations = [];
   for (let i = 0; i < INSERT_AMOUNT; i++) {
-    console.log('entrou no for');
     const recommendation = {
-      name: faker.music.songName(),
+      name: faker.music.songName() + i,
       youtubeLink: 'https://www.youtube.com/watch?v=HLLuYxE-dgc'
     };
     const insertedRecommendation =  await prisma.recommendation.create({
-      data: recommendation
+      data: {
+        ...recommendation,
+        score
+      }
     });
     insertedRecommendations.push(insertedRecommendation);
   }
   return insertedRecommendations;
 }
 
-async function insertFiveDownVotes(id: number) {
+async function insertVotes(id: number, score: number) {
   return await prisma.recommendation.update({
     where:{
       id: id
     },
     data:{
-      score: -5
+      score: score
     }
   });
 }
 
+
+
 const recommendationsFactory = {
   insert,
-  insertTwenty,
-  insertFiveDownVotes
+  insertMany,
+  insertVotes
 };
 
 export default recommendationsFactory;
