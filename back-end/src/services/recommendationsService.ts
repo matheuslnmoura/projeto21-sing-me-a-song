@@ -91,3 +91,5 @@ export const recommendationService = {
   getById: getByIdOrFail,
   getTop,
 };
+
+export default recommendationService;
